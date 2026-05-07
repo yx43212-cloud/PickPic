@@ -1,0 +1,77 @@
+name: Deploy PicPick to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - work
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check whether GitHub Pages is enabled
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          status=$(curl -sS -o /tmp/pages.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${REPOSITORY}/pages")
+
+          if [ "$status" = "200" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "GitHub Pages is enabled for ${REPOSITORY}."
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## GitHub Pages is not enabled yet"
+              echo ""
+              echo "GitHub returned HTTP ${status} for the Pages API, so deployment was skipped instead of failing at configure-pages."
+              echo ""
+              echo "To enable it: Settings → Pages → Source → GitHub Actions. Then re-run this workflow."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::notice::GitHub Pages is not enabled. Go to Settings → Pages → Source → GitHub Actions, then re-run this workflow."
+          fi
+
+      - name: Prepare static site
+        if: steps.pages.outputs.enabled == 'true'
+        run: |
+          mkdir -p _site/src
+          cp index.html picpick.html _site/
+          cp src/*.js src/styles.css _site/src/
+          touch _site/.nojekyll
+
+      - name: Configure Pages
+        if: steps.pages.outputs.enabled == 'true'
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        if: steps.pages.outputs.enabled == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        if: steps.pages.outputs.enabled == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
