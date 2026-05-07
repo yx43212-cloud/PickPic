@@ -40,9 +40,9 @@ http://localhost:5173
 
 1. **最直接**：在 repo 裡打開 `picpick.html`。
 2. **本機預覽**：執行 `npm run dev`，再開 `http://localhost:5173`。
-3. **線上預覽**：本 repo 已加入 GitHub Pages workflow；合併到 `main`、`master` 或 `work` 後，到 GitHub 的 **Actions → Deploy PicPick to GitHub Pages** 查看部署結果與 Pages 網址。
+3. **線上預覽**：本 repo 已加入手動 GitHub Pages workflow；先啟用 Pages 後，到 **Actions → Deploy PicPick to GitHub Pages → Run workflow** 手動部署。
 
-> 你截圖中的 `Get Pages site failed / Not Found` 就是 GitHub Pages 尚未啟用造成的。請先到 repo 的 **Settings → Pages**，將 Source 設為 **GitHub Actions**，再重新執行 workflow。現在 workflow 會先檢查 Pages 是否啟用；若尚未啟用，會用提示訊息跳過部署，避免直接在 Configure Pages 爆紅。
+> 你截圖中的 `Deploy PicPick to GitHub Pages / deploy (push)` 是 GitHub 還在跑同名 push check。現在 push 事件只會做靜態檔案存在檢查並成功結束，不會碰 GitHub Pages API；真正 Pages 部署改到手動 job。要部署 Pages 時，請先到 repo 的 **Settings → Pages**，將 Source 設為 **GitHub Actions**，再到 Actions 手動執行 workflow。
 
 
 ## Vercel 部署

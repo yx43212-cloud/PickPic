@@ -1,5 +1,9 @@
 name: Deploy PicPick to GitHub Pages
 
+# Pushes must not fail just because GitHub Pages is not enabled yet.
+# Therefore the push job below is a lightweight validation check that succeeds.
+# Real Pages deployment is manual via workflow_dispatch after Settings → Pages
+# has Source set to GitHub Actions.
 on:
   push:
     branches:
@@ -19,14 +23,28 @@ concurrency:
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    name: deploy
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate static PicPick files
+        run: |
+          test -f index.html
+          test -f picpick.html
+          test -f src/styles.css
+          test -f src/main.js
+          echo "Push validation passed. Pages deployment is manual: Actions → Deploy PicPick to GitHub Pages → Run workflow."
+
+  preflight:
+    name: Check GitHub Pages settings
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      pages_enabled: ${{ steps.pages.outputs.enabled }}
+    steps:
       - name: Check whether GitHub Pages is enabled
         id: pages
         env:
@@ -46,15 +64,30 @@ jobs:
             {
               echo "## GitHub Pages is not enabled yet"
               echo ""
-              echo "GitHub returned HTTP ${status} for the Pages API, so deployment was skipped instead of failing at configure-pages."
+              echo "GitHub returned HTTP ${status} for the Pages API."
               echo ""
-              echo "To enable it: Settings → Pages → Source → GitHub Actions. Then re-run this workflow."
+              echo "This is not an app build error. Enable Pages first:"
+              echo ""
+              echo "1. Open repository Settings → Pages."
+              echo "2. Set Source to GitHub Actions."
+              echo "3. Re-run this workflow manually."
             } >> "$GITHUB_STEP_SUMMARY"
-            echo "::notice::GitHub Pages is not enabled. Go to Settings → Pages → Source → GitHub Actions, then re-run this workflow."
+            echo "::notice::GitHub Pages is not enabled. Settings → Pages → Source → GitHub Actions, then re-run this workflow."
           fi
 
+  pages-deploy:
+    name: Deploy static site
+    needs: preflight
+    if: github.event_name == 'workflow_dispatch' && needs.preflight.outputs.pages_enabled == 'true'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Prepare static site
-        if: steps.pages.outputs.enabled == 'true'
         run: |
           mkdir -p _site/src
           cp index.html picpick.html _site/
@@ -62,16 +95,13 @@ jobs:
           touch _site/.nojekyll
 
       - name: Configure Pages
-        if: steps.pages.outputs.enabled == 'true'
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        if: steps.pages.outputs.enabled == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
       - name: Deploy to GitHub Pages
-        if: steps.pages.outputs.enabled == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
