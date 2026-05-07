@@ -1,0 +1,12 @@
+{
+  "name": "picpick",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "build": "tsc && node scripts/copy-assets.mjs",
+    "preview": "node server.mjs dist",
+    "start": "npm run dev"
+  }
+}
