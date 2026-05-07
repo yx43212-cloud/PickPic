@@ -59,7 +59,7 @@ http://localhost:5173
 3. Source 選 **GitHub Actions**。
 4. 回到 **Actions**，重新執行 `Deploy PicPick to GitHub Pages`。
 
-目前 workflow 已改成手動執行，避免每次 Merge 都自動部署失敗；它也加入預檢，如果 Pages 尚未啟用，會在 summary 顯示設定方式並跳過部署，不會再直接卡在 Configure Pages。
+目前 workflow 的 push check 只做靜態檔案存在檢查，避免每次 Merge 都自動部署失敗；真正 Pages 部署改成手動執行，並加入預檢。如果 Pages 尚未啟用，它會在 summary 顯示設定方式並跳過部署，不會再直接卡在 Configure Pages。
 
 部署內容會包含：
 

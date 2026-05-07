@@ -42,7 +42,7 @@ http://localhost:5173
 2. **本機預覽**：執行 `npm run dev`，再開 `http://localhost:5173`。
 3. **線上預覽**：本 repo 已加入手動 GitHub Pages workflow；先啟用 Pages 後，到 **Actions → Deploy PicPick to GitHub Pages → Run workflow** 手動部署。
 
-> 你截圖中的 `Merge pull request ...` 失敗，是因為舊 workflow 會在每次 merge 後自動嘗試部署 GitHub Pages；但 repo 尚未啟用 Pages 時，GitHub API 會回 `Not Found`。現在已改成 **手動部署**，Merge 不會再觸發 Pages 部署失敗。要用 Pages 時，請先到 repo 的 **Settings → Pages**，將 Source 設為 **GitHub Actions**，再手動執行 workflow。
+> 你截圖中的 `Deploy PicPick to GitHub Pages / deploy (push)` 是 GitHub 還在跑同名 push check。現在 push 事件只會做靜態檔案存在檢查並成功結束，不會碰 GitHub Pages API；真正 Pages 部署改到手動 job。要部署 Pages 時，請先到 repo 的 **Settings → Pages**，將 Source 設為 **GitHub Actions**，再到 Actions 手動執行 workflow。
 
 
 ## Vercel 部署

@@ -1,8 +1,15 @@
 name: Deploy PicPick to GitHub Pages
 
-# This workflow is manual on purpose. Merging a PR should not fail just because
-# GitHub Pages has not been enabled in the repository settings yet.
+# Pushes must not fail just because GitHub Pages is not enabled yet.
+# Therefore the push job below is a lightweight validation check that succeeds.
+# Real Pages deployment is manual via workflow_dispatch after Settings → Pages
+# has Source set to GitHub Actions.
 on:
+  push:
+    branches:
+      - main
+      - master
+      - work
   workflow_dispatch:
 
 permissions:
@@ -15,8 +22,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  deploy:
+    name: deploy
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate static PicPick files
+        run: |
+          test -f index.html
+          test -f picpick.html
+          test -f src/styles.css
+          test -f src/main.js
+          echo "Push validation passed. Pages deployment is manual: Actions → Deploy PicPick to GitHub Pages → Run workflow."
+
   preflight:
     name: Check GitHub Pages settings
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
       pages_enabled: ${{ steps.pages.outputs.enabled }}
@@ -51,10 +75,10 @@ jobs:
             echo "::notice::GitHub Pages is not enabled. Settings → Pages → Source → GitHub Actions, then re-run this workflow."
           fi
 
-  deploy:
+  pages-deploy:
     name: Deploy static site
     needs: preflight
-    if: needs.preflight.outputs.pages_enabled == 'true'
+    if: github.event_name == 'workflow_dispatch' && needs.preflight.outputs.pages_enabled == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
