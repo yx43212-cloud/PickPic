@@ -37,6 +37,21 @@ http://localhost:5173
 
 > 注意：若 GitHub Pages 尚未啟用，請到 repo 的 **Settings → Pages**，將 Source 設為 **GitHub Actions**。
 
+
+## Vercel 部署
+
+本專案現在可直接串 Vercel：
+
+1. 到 Vercel 選 **Add New Project**。
+2. Import 這個 GitHub repo。
+3. Vercel 會讀取 `vercel.json`：
+   - Build Command：`npm run build`
+   - Output Directory：`dist`
+   - Framework：Other / Static
+4. 部署完成後開啟 Vercel 給你的網址。
+
+如果之前按 Merge 後 Vercel 沒反應，通常是因為 repo 沒有連到 Vercel 專案、Vercel 沒有正確的 Output Directory，或 build script 依賴未安裝的 TypeScript 編譯器。現在 build 已改成使用已提交的瀏覽器版 JS 產生 `dist/`，不需要額外 npm 套件即可部署。
+
 ## 功能
 
 - 首頁提供「快速生成」、「進階客製」、「我的風格庫」三個入口。
@@ -54,9 +69,9 @@ npm run build
 
 建置流程會：
 
-1. 編譯 TypeScript 到 `dist/src`。
-2. 複製 `index.html` 與 CSS 到 `dist/`。
-3. 重新產生可直接雙擊開啟的 `picpick.html` 單檔版。
+1. 複製 `index.html`、`picpick.html`、`src/*.js` 與 CSS 到 `dist/`。
+2. 重新產生可直接雙擊開啟的 `picpick.html` 單檔版。
+3. 如需檢查 TypeScript 型別，可另外執行 `npm run typecheck`。
 
 如果只想檢視已建置的輸出，可執行：
 

@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "node server.mjs",
-    "build": "tsc && node scripts/sync-compiled-js.mjs && node scripts/copy-assets.mjs && node scripts/build-standalone.mjs",
+    "build": "node scripts/copy-assets.mjs && node scripts/build-standalone.mjs",
     "preview": "node server.mjs dist",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "typecheck": "tsc --noEmit"
   }
 }

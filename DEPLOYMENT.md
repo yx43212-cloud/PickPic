@@ -41,3 +41,22 @@ http://localhost:5173
 - `picpick.html`
 - `src/*.js`
 - `src/styles.css`
+
+## 方式 4：Vercel
+
+本 repo 已加入 `vercel.json`，可以直接 Import 到 Vercel。
+
+1. 到 Vercel 選 **Add New Project**。
+2. 選這個 GitHub repo。
+3. 確認設定：
+   - Framework Preset：Other / Static
+   - Build Command：`npm run build`
+   - Output Directory：`dist`
+4. 按 Deploy。
+
+如果 Vercel 沒自動部署，請檢查：
+
+- Vercel 專案是否真的連到這個 GitHub repo。
+- Production Branch 是否是你 merge 的分支。
+- GitHub App / Vercel 權限是否允許讀取 repo。
+- Deployments 裡是否有 build error。
