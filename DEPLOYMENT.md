@@ -31,9 +31,24 @@ http://localhost:5173
 
 1. 到 GitHub repo 的 **Settings → Pages**。
 2. 將 Source 設為 **GitHub Actions**。
-3. 合併或推送到 `main`、`master` 或 `work`。
-4. 到 **Actions → Deploy PicPick to GitHub Pages** 等待部署完成。
-5. 點開 workflow summary 裡的 Pages URL。
+3. 如果你看到 `Get Pages site failed`、`Not Found` 或 `Configure Pages` 失敗，代表第 2 步還沒設定完成。
+4. 合併或推送到 `main`、`master` 或 `work`。
+5. 到 **Actions → Deploy PicPick to GitHub Pages** 等待部署完成。
+6. 點開 workflow summary 裡的 Pages URL。
+
+
+### Configure Pages 顯示 Not Found 是什麼意思？
+
+這不是 PicPick 程式碼壞掉，而是 GitHub repo 尚未建立 Pages site。`actions/configure-pages` 會呼叫 GitHub Pages API；如果 repo 的 Pages 沒有啟用，API 會回 `404 Not Found`，所以你會看到 `Get Pages site failed`。
+
+解法：
+
+1. 打開 GitHub repo。
+2. 進入 **Settings → Pages**。
+3. Source 選 **GitHub Actions**。
+4. 回到 **Actions**，重新執行 `Deploy PicPick to GitHub Pages`。
+
+目前 workflow 已加入預檢：如果 Pages 尚未啟用，它會在 summary 顯示設定方式並跳過部署，不會再直接卡在 Configure Pages。
 
 部署內容會包含：
 
