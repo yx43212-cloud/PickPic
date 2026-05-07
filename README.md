@@ -2,6 +2,28 @@
 
 PicPick 是一個繁體中文 AI 照片編輯提示詞生成 Web App。它不是傳統修圖工具，而是透過照片上傳、卡片式選項與滑桿微調，自動組裝可用於 ChatGPT、Midjourney、Grok、Gemini、可靈、即夢等工具的提示詞。
 
+## 立刻開啟
+
+如果你只是想馬上看到畫面，不想跑任何指令：
+
+1. 直接打開 repo 根目錄的 `picpick.html`。
+2. 這是完整打包的單檔版本，包含 UI、樣式、假資料與提示詞生成邏輯。
+
+## 使用本機伺服器開啟
+
+```bash
+npm install
+npm run dev
+```
+
+然後開啟：
+
+```txt
+http://localhost:5173
+```
+
+`npm run dev` 會啟動本機靜態伺服器，載入 `index.html` 與 `src/main.js`。
+
 ## 功能
 
 - 首頁提供「快速生成」、「進階客製」、「我的風格庫」三個入口。
@@ -11,19 +33,20 @@ PicPick 是一個繁體中文 AI 照片編輯提示詞生成 Web App。它不是
 - 結果頁輸出完整提示詞、精簡提示詞、負面提示詞與專屬風格碼，並支援一鍵複製。
 - 我的風格庫使用 localStorage 儲存常用設定，可再次套用、編輯與刪除。
 
-## 開發
-
-```bash
-npm install
-npm run dev
-```
-
-`npm run dev` 會直接啟動本機伺服器並載入已提交的瀏覽器版 JavaScript；開啟 http://localhost:5173。
-
 ## 建置
 
 ```bash
 npm run build
 ```
 
-輸出會建立在 `dist/`。如果只想檢視已建置的輸出，可執行 `npm run preview`。修改 TypeScript 原始碼後，請執行 `npm run build` 並同步更新 `src/*.js` 瀏覽器版檔案。
+建置流程會：
+
+1. 編譯 TypeScript 到 `dist/src`。
+2. 複製 `index.html` 與 CSS 到 `dist/`。
+3. 重新產生可直接雙擊開啟的 `picpick.html` 單檔版。
+
+如果只想檢視已建置的輸出，可執行：
+
+```bash
+npm run preview
+```

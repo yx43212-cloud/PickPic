@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node server.mjs",
-    "build": "tsc && node scripts/copy-assets.mjs",
+    "build": "tsc && node scripts/sync-compiled-js.mjs && node scripts/copy-assets.mjs && node scripts/build-standalone.mjs",
     "preview": "node server.mjs dist",
     "start": "npm run dev"
   }
