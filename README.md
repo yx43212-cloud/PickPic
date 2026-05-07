@@ -24,6 +24,19 @@ http://localhost:5173
 
 `npm run dev` 會啟動本機靜態伺服器，載入 `index.html` 與 `src/main.js`。
 
+
+## Merge 之後為什麼沒有畫面？
+
+按下 GitHub 的 **Merge** 只代表程式碼被合併到分支，瀏覽器不會自動跳出 App，也不等於已經部署到公開網址。
+
+合併後請用其中一種方式開啟：
+
+1. **最直接**：在 repo 裡打開 `picpick.html`。
+2. **本機預覽**：執行 `npm run dev`，再開 `http://localhost:5173`。
+3. **線上預覽**：本 repo 已加入 GitHub Pages workflow；合併到 `main`、`master` 或 `work` 後，到 GitHub 的 **Actions → Deploy PicPick to GitHub Pages** 查看部署結果與 Pages 網址。
+
+> 注意：若 GitHub Pages 尚未啟用，請到 repo 的 **Settings → Pages**，將 Source 設為 **GitHub Actions**。
+
 ## 功能
 
 - 首頁提供「快速生成」、「進階客製」、「我的風格庫」三個入口。
