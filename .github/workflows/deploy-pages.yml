@@ -1,0 +1,83 @@
+name: Deploy PicPick to GitHub Pages
+
+# This workflow is manual on purpose. Merging a PR should not fail just because
+# GitHub Pages has not been enabled in the repository settings yet.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    name: Check GitHub Pages settings
+    runs-on: ubuntu-latest
+    outputs:
+      pages_enabled: ${{ steps.pages.outputs.enabled }}
+    steps:
+      - name: Check whether GitHub Pages is enabled
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          status=$(curl -sS -o /tmp/pages.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${REPOSITORY}/pages")
+
+          if [ "$status" = "200" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "GitHub Pages is enabled for ${REPOSITORY}."
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## GitHub Pages is not enabled yet"
+              echo ""
+              echo "GitHub returned HTTP ${status} for the Pages API."
+              echo ""
+              echo "This is not an app build error. Enable Pages first:"
+              echo ""
+              echo "1. Open repository Settings → Pages."
+              echo "2. Set Source to GitHub Actions."
+              echo "3. Re-run this workflow manually."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::notice::GitHub Pages is not enabled. Settings → Pages → Source → GitHub Actions, then re-run this workflow."
+          fi
+
+  deploy:
+    name: Deploy static site
+    needs: preflight
+    if: needs.preflight.outputs.pages_enabled == 'true'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare static site
+        run: |
+          mkdir -p _site/src
+          cp index.html picpick.html _site/
+          cp src/*.js src/styles.css _site/src/
+          touch _site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
