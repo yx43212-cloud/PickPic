@@ -32,3 +32,4 @@ ${js}
 `;
 
 writeFileSync('picpick.html', html);
+writeFileSync('index.html', html);

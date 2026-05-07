@@ -2,6 +2,17 @@
 
 如果你按下 **Merge** 後「沒有反應」，這是正常的：Merge 只會合併程式碼，不會自動在你的電腦打開網頁。
 
+
+## 空白頁排查
+
+若看到空白頁，最常見原因是 HTML 還在載入外部 ES module，但瀏覽器或部署環境沒有成功載入 JS。現在 `index.html` 與 `picpick.html` 都已改成單檔版，正常情況下直接打開就會看到 PicPick 首頁。
+
+請確認：
+
+1. 重新 pull / merge 到包含最新修正的 commit。
+2. 若部署到 Vercel 或 Pages，確認部署內容使用最新的 `index.html`。
+3. 本機可執行 `npm run build` 後再開 `index.html`，它會重新產生單檔版。
+
 ## 方式 1：直接開啟單檔版
 
 在 repo 根目錄直接開啟：

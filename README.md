@@ -22,8 +22,15 @@ npm run dev
 http://localhost:5173
 ```
 
-`npm run dev` 會啟動本機靜態伺服器，載入 `index.html` 與 `src/main.js`。
+`npm run dev` 會啟動本機靜態伺服器，載入已內嵌 CSS / JavaScript 的 `index.html`。
 
+
+
+## 為什麼之前打開會一片空白？
+
+如果直接用瀏覽器雙擊舊版 `index.html`，它會透過 `<script type="module">` 載入 `src/main.js`。部分瀏覽器或部署環境會阻擋本機 `file://` 的 ES module 載入，結果就是只有空白頁。
+
+現在已修正：`index.html` 和 `picpick.html` 都是完整單檔版，CSS 與 JavaScript 已內嵌，不再依賴外部 module 檔案。你可以直接打開 `index.html` 或 `picpick.html`，Vercel / GitHub Pages 部署根目錄也會直接顯示 App。
 
 ## Merge 之後為什麼沒有畫面？
 
