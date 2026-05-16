@@ -61,7 +61,7 @@ http://localhost:5173
 
 ## 連載漫畫 GPT 製作系統
 
-本 repo 也收錄一套可直接貼進自訂 GPT 使用的「貓咪公司健康漫畫」連載製作系統，適合產出 9:16 直幅、6–8 格、單一營養健康觀念的繁體中文漫畫腳本。最快用法：先把文件第 8 節貼到自訂 GPT 的 Instructions，之後每集只要填「健康觀念、角色、場景、觀眾痛點」即可產出分鏡與 AI 繪圖提示詞。請見 [`docs/cat-company-comic-gpt-system.md`](docs/cat-company-comic-gpt-system.md)。
+本 repo 也收錄一套可直接貼進自訂 GPT 使用的「上班毛很多」連載製作系統，適合產出 9:16 直幅、6–8 格、單一營養健康觀念的繁體中文漫畫腳本。最快用法：打開 App 首頁後按「🐱 做上班毛很多漫畫」或上方「🐱 上班毛很多」，頁面裡有「複製系統提示詞」與「複製單集模板」按鈕；複製後貼到 ChatGPT / 自訂 GPT 即可產出分鏡與 AI 繪圖提示詞。完整規格請見 [`docs/shangban-mao-henduo-comic-gpt-system.md`](docs/shangban-mao-henduo-comic-gpt-system.md)。
 
 ## 功能
 
