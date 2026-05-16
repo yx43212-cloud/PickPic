@@ -59,10 +59,6 @@ http://localhost:5173
 
 如果之前按 Merge 後 Vercel 沒反應，通常是因為 repo 沒有連到 Vercel 專案、Vercel 沒有正確的 Output Directory，或 build script 依賴未安裝的 TypeScript 編譯器。現在 build 已改成使用已提交的瀏覽器版 JS 產生 `dist/`，不需要額外 npm 套件即可部署。
 
-## 連載漫畫 GPT 製作系統
-
-本 repo 也收錄一套可直接貼進自訂 GPT 使用的「貓咪公司健康漫畫」連載製作系統，適合產出 9:16 直幅、6–8 格、單一營養健康觀念的繁體中文漫畫腳本。請見 [`docs/cat-company-comic-gpt-system.md`](docs/cat-company-comic-gpt-system.md)。
-
 ## 功能
 
 - 首頁提供「快速生成」、「進階客製」、「我的風格庫」三個入口。
